@@ -1,0 +1,33 @@
+<?php
+
+namespace SaveLife\Http\Middleware;
+
+use Closure;
+use SaveLife\User;
+use Illuminate\Support\Facades\Auth;
+
+class RedirectIfAuthenticated
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @param  string|null  $guard
+     * @return mixed
+     */
+    public function handle($request, Closure $next, $guard = null)
+    {
+        if (Auth::guard($guard)->check()) {
+            //return redirect('/home'); 
+            if(Auth::user()->category_id == 1) {
+                return redirect()->route('donor_home');
+            }
+            else {
+                return redirect()->route('bank_home');
+            }            
+        }
+
+        return $next($request);
+    }
+}
